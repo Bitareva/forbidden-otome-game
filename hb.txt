@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forbidden Otome Game</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f0f0f;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .card {
+      max-width: 600px;
+      background-color: #1e1e1e;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+    button {
+      background-color: #ff4d6d;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #ff6382;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div id="scene-text"></div>
+    <div id="choices"></div>
+  </div>
+
+  <script>
+    const scenes = [
+      {
+        text: `Kamar sunyi. William duduk deket lo, matanya fokus. Dia bilang, “Lo ngarep gue yang mulai duluan ya?”<br>
+        Nafasnya deket banget. Tangan dia udah nyentuh pundak lo pelan.`,
+        choices: [
+          "Gue penasaran lo bakal ngapain",
+          "Jangan bikin gue nyesel ya",
+          "Mau buktiin sekarang?"
+        ]
+      },
+      {
+        text: `William narik lo makin deket. Dia bisik di telinga lo, "Gue buktiin ya... pelan-pelan dulu. Biar lo nagih."<br>
+        Tangan dia turun dari bahu ke pinggang. Deg-degan lo makin kenceng.`,
+        choices: [
+          "Cium balik, ambil alih kontrol",
+          "Tapi jangan terlalu cepet ya",
+          "Mainnya pelan-pelan aja, Will"
+        ]
+      },
+      {
+        text: `Tiba-tiba ada suara ketukan pintu. Oliver nyari lo. William bisik, “Lo bahaya. Kalo gue jatuh beneran, lo siap tanggung jawab?”<br>
+        Tapi lo belum sempet jawab...`,
+        choices: [
+          "Sembunyi di balik William",
+          "Keluar dan temui Oliver",
+          "Bisik ke William: nanti kita lanjutin"
+        ]
+      }
+    ];
+
+    let sceneIndex = 0;
+    let history = [];
+
+    function renderScene() {
+      const scene = scenes[sceneIndex];
+      document.getElementById("scene-text").innerHTML = "<p>" + scene.text + "</p>";
+      const choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+      scene.choices.forEach((choice, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = choice;
+        btn.onclick = () => {
+          history.push(choice);
+          sceneIndex++;
+          if (sceneIndex >= scenes.length) {
+            endGame();
+          } else {
+            renderScene();
+          }
+        };
+        choicesDiv.appendChild(btn);
+      });
+    }
+
+    function endGame() {
+      document.getElementById("scene-text").innerHTML = `
+        <p>🔥 Cerita kamu selesai sampai di sini! 🔥</p>
+        <p><strong>Riwayat pilihan kamu:</strong><br>${history.join(" → ")}</p>
+        <button onclick="restart()">Main Ulang</button>
+      `;
+      document.getElementById("choices").innerHTML = "";
+    }
+
+    function restart() {
+      sceneIndex = 0;
+      history = [];
+      renderScene();
+    }
+
+    renderScene();
+  </script>
+</body>
+</html>
